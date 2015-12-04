@@ -1,0 +1,118 @@
+$bg_blue: rgba(0, 52, 105, 0.6);
+$darkblue: rgb(0, 52, 105);
+$lightblue: rgb(0, 146, 192);
+$red: rgb(240, 83, 86);
+$orange: #D66000;
+$darkestblue: rgb(0, 40, 64);
+$blue: #0F6CB6;
+
+@mixin translateAll($x, $y) {
+
+  -webkit-transform: translate(#{$x}, #{$y});
+  -ms-transform: translate(#{$x}, #{$y});
+  -moz-transform: translate(#{$x}, #{$y});
+  -o-transform: translate(#{$x}, #{$y});
+  transform: translate(#{$x}, #{$y});
+}
+@mixin gradient($dirStart, $dirEnd, $start, $mid, $end) {
+  background: -webkit-linear-gradient($dirStart, $start,$mid, $end, $end , $end, $end); /* For Safari 5.1 to 6.0 */
+  background: -o-linear-gradient($dirEnd, $start, $mid,$end ,  $end , $end, $end); /* For Opera 11.1 to 12.0 */
+  background: -moz-linear-gradient($dirEnd, $start, $mid, $end , $end , $end, $end); /* For Firefox 3.6 to 15 */
+  background: linear-gradient(to $dirEnd, $start, $mid, $end , $end , $end,$end); /* Standard syntax */
+}
+
+@mixin compat($attr, $value) {
+ #{$attr} : #{$value};
+ -webkit-#{$attr} : #{$value};
+ -moz-#{$attr} : #{$value};
+ -ms-#{$attr} : #{$value};
+ -o-#{$attr} : #{$value};
+
+}
+@mixin background($image, $vertical, $horizontal) {
+  background-image: $image;
+  background-position: $vertical $horizontal;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+@mixin calcAll($property, $value) {
+  #{$property}: calc(#{$value});
+  #{$property}: -ms-calc(#{$value});
+  #{$property}: -moz-calc(#{$value});
+  #{$property}: -webkit-calc(#{$value});
+  #{$property}: -o-calc(#{$value});
+}
+
+@mixin widthCalc($toEval) {
+  @include calcAll("width", "#{$toEval}");
+}
+
+@mixin heightCalc($toEval) {
+  @include calcAll("height", "#{$toEval}");
+}
+
+@mixin spot($bg, $w, $h, $x, $y) {
+  background-color: $bg;
+  @include widthCalc($w);
+  @include heightCalc($h);
+
+  @include calcAll("left", "#{$x}");
+  @include calcAll("top", "#{$y}");
+}
+
+@mixin spritePos($w, $h, $x, $y) {
+  @include widthCalc(#{$w});
+    @include heightCalc(#{$h});
+  background-position: $x $y;
+}
+
+@mixin icon($url, $w, $h, $hover: none) {
+  @include widthCalc(#{$w});
+  @include heightCalc(#{$h});
+  position: relative;
+  background-size: 100% 100%;
+  background-image: $url;
+  background-repeat: no-repeat;
+
+  &::after {
+    @include background($hover, center, center);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%; height: 100%;
+    content: " ";
+    background-size: cover; text-align: right;
+    z-index: 100;
+    opacity: 0;
+
+    @include compat(transition, "opacity .3s");
+  }
+}
+
+@mixin mobileOverflow {
+  overflow: auto;
+
+  &::-webkit-scrollbar {
+      -webkit-appearance: none;
+  }
+
+  &::-webkit-scrollbar:vertical {
+      width: 11px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+      border-radius: 8px;
+      border: 2px solid white; /* should match background, can't be transparent */
+      background-color: rgba(0, 0, 0, .5);
+  }
+
+  &::-webkit-scrollbar:horizontal {
+      height: 11px;
+  }
+
+  &::-webkit-scrollbar-track {
+      background-color: #fff;
+      border-radius: 8px;
+  }
+}
