@@ -13,12 +13,19 @@ var GHOObjects = function() {
               ['date'].concat(CURRENTDATA.map(function(d) { return d.label; })),
               ['Funding Requirement'].concat(
                 CURRENTDATA.map(function(d) { return d.requirement; })
+              ),
+              ['People Targeted'].concat(
+                CURRENTDATA.map(function(d) { return d.targeted; })
               )
             ],
             axes: {
-              'Funding Requirement' : 'y'
+              'Funding Requirement' : 'y',
+              'People Targeted' : 'y2'
             },
-            type: "bar"
+            types: {
+              'Funding Requirement': 'bar',
+              'People Targeted' : 'spline'
+            }
           },
           bar: {
               width: {
@@ -30,6 +37,16 @@ var GHOObjects = function() {
               type: 'category',
               tick: {
                   format: '%b %Y'
+              }
+            },
+            y2: {
+              show: false,
+              tick: {
+                format: function(d) {
+                  var fmt = d3.formatPrefix(d);
+                  if (fmt.symbol == "G") { fmt.symbol = "B"; }
+                  return d3.round(fmt.scale(d), 1) + fmt.symbol;
+                }
               }
             },
             y: {
@@ -47,7 +64,8 @@ var GHOObjects = function() {
             }
           },
           colors : {
-            "Funding Requirement" : "rgb(240, 83, 86)"
+            "Funding Requirement" : "rgb(240, 83, 86)",
+            "People Targeted" : "rgb(0, 146, 192)"
           },
           transition: {
               duration: 3000
@@ -62,88 +80,79 @@ var GHOObjects = function() {
       });
     }, // end of initializeChart.
     //has onClickEvent(feature) event
-    initializeMap : function (events) {
+    initializeMap : function (geojsonData, events) {
       console.log("initializing GHO Map");
       if (!mapObject) {
         mapboxgl.accessToken = mapAPI;
         mapObject = new mapboxgl.Map({
             container: 'map', // container id
             style: 'mapbox://styles/rapiocha/cihr4rc6a008595lyxi1j47h1', //stylesheet location
-            center: [14.7, 12], // starting position
+            // {lng: 13.401527376541026, lat: 22.921476647396943}lat: 22.921476647396943lng: 13.401527376541026__proto__: LngLat
+            center: [13.4, 22.9], // starting position
             zoom: 1.7 // starting zoom
         });
 
         //Put markers
         mapObject.on('style.load', function() {
-          $.ajax({
-            url: "https://sheetsu.com/apis/ac727b26",
-            dataType: "json",
-            async: false,
-            success: function(data) {
+          mapObject.addSource("countries", geojsonData); // end of mapObject.addSource
+          // data.result.forEach(function(d) {
+          // }); //end of data.result.forEach
+          //Add layers...
 
-              //Creating Map Source
-              mapObject.addSource("countries", {
-                "type": "geojson",
-                "data": {
-                  "type": "FeatureCollection",
-
-                  //Start rendering datapoints
-                  "features": data.result.map(function(d) {
-                      return {
-                        "type": "Feature",
-                        "geometry": {
-                          "type": "Point",
-                          "coordinates": [parseFloat(d.lat), parseFloat(d.lon)]
-                        },
-                        "properties": d
-                      }
-                  })
-                  //end of feature rendering
-                }
-              }); // end of mapObject.addSource
-
-              // data.result.forEach(function(d) {
-              // }); //end of data.result.forEach
-              //Add layers...
-              mapObject.addLayer({
-                  'id': 'country_marker',
-                  'interactive': true,
-                  'type': 'circle',
-                  'source': 'countries',
-                  'paint': {
-                      'circle-radius': 6,
-                      'circle-color': 'rgb(240, 83, 86)'
-                  }
-              });
-
-              mapObject.addLayer({
-                  'id': 'country_result',
-                  'type': 'circle',
-                  'source': 'countries',
-                  'paint': {
-                      'circle-radius': 15,
-                      'circle-color': 'rgba(240, 83, 86, 0.3)'
-                  }
-              });
-
-              // if oninit is defined
-              if(events && events.oninit && events.oninit instanceof Function) {
-                events.oninit(data);
+          mapObject.addLayer({
+              'id': 'country_result',
+              'type': 'circle',
+              'source': 'countries',
+              'paint': {
+                  'circle-radius': 15,
+                  'circle-color': 'rgba(240, 83, 86, 0.3)'
               }
+          });
 
+          mapObject.addLayer({
+              'id': 'country_marker',
+              'interactive': true,
+              'type': 'circle',
+              'source': 'countries',
+              'paint': {
+                  'circle-radius': 6,
+                  'circle-color': 'rgb(240, 83, 86)'
+              }
+          });
 
-              mapObject.on('click',function(e) {
-
-                mapObject.featuresAt(e.point, {radius: 10, layer: 'country_marker'},
-                  function(err, features) {
-                    if (features && features.length > 0 && events && events.onclick && events.onclick instanceof Function) {
-                      events.onclick(features[0]);
-                    }
-                  });
-              });
-              //End of Adding layers
+          mapObject.addLayer({
+            "id": "country_name",
+            "type": "symbol",
+            'interactive': true,
+            "source": "countries",
+            "layout": {
+                "text-field": "{country}",
+                "text-font": ["Open Sans Semibold", "Arial Unicode MS Bold"],
+                "text-offset": [0, 0.6],
+                "text-anchor": "top",
+                "text-size": 10
+            },
+            "paint": {
+                "text-color": "white"
             }
           });
+
+          // if oninit is defined
+          if(events && events.oninit && events.oninit instanceof Function) {
+            // events.oninit(data);
+          }
+
+
+          mapObject.on('click',function(e) {
+
+            mapObject.featuresAt(e.point, {radius: 10, layer: ['country_marker','country_name']},
+              function(err, features) {
+                if (features && features.length > 0 && events && events.onclick && events.onclick instanceof Function) {
+                  events.onclick(features[0]);
+                }
+              });
+          });
+          //End of Adding layers
         }); // End of mapObject.on('style.load')
         //End Put markers
       }

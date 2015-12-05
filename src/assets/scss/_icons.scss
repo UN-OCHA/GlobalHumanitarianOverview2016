@@ -1,1 +1,13 @@
 @import 'mixins';
+
+i.icon {
+  background-repeat: no-repeat;
+  display: inline-block;
+  &.i-stats {
+   width: 40px; height: 40px;
+   background-size: 100% 100%;
+  }
+  &.i-in-need { background-image: url(../img/in-need.png); }
+  &.i-targeted { background-image: url(../img/targeted.png); }
+  &.i-fund { background-image: url(../img/fund.png);  }
+}

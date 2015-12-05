@@ -27,7 +27,7 @@
 <section id='un-home' data-isShowing='true' class='subpage'>
   <div class='viewport' width="100%" height="100%">
     <div class='video-bg-area'>
-      <video id='home-video' muted="true" src="http://southsudan.messengersofhumanity.org/video/LoopFirstScreen_prores_Mp4_1080.mp4"  loop="true" autoplay="true"></video>
+      <video id='home-video' muted="true" src="./assets/mov/faces.webm" autoplay="true"></video>
     </div>
     <article class='home-menu'>
       <nav>
@@ -64,7 +64,16 @@
       </div>
     </article>
     <article id="home-chart">
-      <h3>Funding Requirement</h3>
+      <h3 style='position: relative; background-color: rgba(240, 246, 251, 0.8);'><span style='letter-spacing: 4px;'>$19.7 billion to provide aid</span><br/>
+          <span style='color: #0092c0;letter-spacing: 2.85px;'>to 87.6 million people in need</span>
+          <span style='
+          font-weight: 600;
+          font-size: 45px;
+          position: absolute;
+          top: -2px;
+          letter-spacing: -4.2px;
+          right: 10px;
+          '>in 2016</span></h3>
       <div id="bar-chart"></div>
       <p>
         Cronut cray forage viral meggings master cleanse. Etsy distillery church-key, readymade 3 wolf moon polaroid direct trade paleo art party health goth narwhal. Kombucha irony authentic ennui bespoke, flannel lo-fi you probably haven't heard of them lomo. Sustainable umami actually you probably haven't heard of them biodiesel.
@@ -230,14 +239,95 @@ var CURRENTDATA = [
   { label: "2012",  requirement: 8800000000, targeted: 62000000},
   { label: "2013",  requirement: 12900000000, targeted: 73000000},
   { label: "2014",  requirement: 16800000000, targeted: 76000000},
-  { label: "Jun 2015", requirement: 19659704357, targeted: 82463630},
-  { label: "Sep 2015", requirement: 19800000000, targeted: 82463630},
-  { label: "Nov 2015", requirement: 19900000000, targeted: 82463630}];
+  { label: "2015", requirement: 19700000000, targeted: 87600000}];
 
 var oldDateFormat = d3.time.format("%m-%Y");
 
-// var popupArray = [];
-var popups = PopupManager();
+var popupArray = [];
+$.ajax({
+  url: "https://sheetsu.com/apis/ac727b26",
+  dataType: "json",
+  async: false,
+  success: function(data) {
+    window.geoJsonData = {
+      "type": "geojson",
+      "data": {
+        "type": "FeatureCollection",
+
+        //Start rendering datapoints
+        "features": data.result.map(function(d) {
+            return {
+              "type": "Feature",
+              "geometry": {
+                "type": "Point",
+                "coordinates": [parseFloat(d.lat), parseFloat(d.lon)]
+              },
+              "properties": d
+            }
+        })
+        //end of feature rendering
+      }
+    }; //end of creating geoJson data
+
+    var formatter = function(num) {
+      if (num == "-") {
+        return "&mdash;";
+      } else if (num >= 1000000) {
+        var fmt = d3.formatPrefix(num);
+        if (fmt.symbol == "G") { fmt.symbol = "B"; }
+        return d3.round(fmt.scale(num), 1) + fmt.symbol;
+      }
+      else {
+        var fmt = d3.format(",");
+        return fmt(num);
+      }
+    };
+
+    data.result.forEach(function(item) {
+      item.header = item.country;
+      item.closeText = "X";
+      item.content = function(d) { return "" +
+          "<div class='country-info-area'>" +
+            "<table><tbody>" +
+              "<tr><td><h3>People in need</h3>" +
+                  "<i class='icon i-stats i-in-need'></i><span class='ctr-amt'>" +
+                    formatter(d.peopleInNeed)
+                    + "</span></td>" +
+                  "<td><h3>People Targeted</h3><i class='icon i-stats  i-targeted'></i><span class='ctr-amt'>" + formatter(d.peopleTargeted) +"</span></td>" +
+                  "</tr>" + //first row
+              "<tr><td><h3>Requirements (US$)</h3><i class='icon i-stats i-fund'></i><span class='ctr-amt'>$" + formatter(d.fundingRequired) +"</span></td>" +
+              "<td>&nbsp;</td></tr>" + //2nd row
+            "</tbody></table>" +
+          "</div>" +
+          "<div class='country-text'><p>" + d.blurb + "</p></div>"}(item);
+      //End of item.content
+
+      popupArray.push(new Popup(item.iso, item
+        , {onClose: NavControl.clearPopup}
+      ));
+      //For flipbook
+      popupArray.push(new Popup("flipbook-" + item.iso,
+        {
+          image: "",
+          downloadLink: item.downloadLink,
+          fbLink: item.fbLink,
+          twLink: item.twLink,
+          className: 'flipbook-item',
+          content: "<iframe frameborder='0' data-iframe-src='" + item.flipbookLink + "'></iframe>",
+          closeText: "X"
+        },
+        { //start of events
+          onClose: NavControl.clearPopup,
+          onOpen: function(target, event) {
+            var $iframe = $(target).find("iframe[data-iframe-src]");
+            $iframe.attr("src", $iframe.data().iframeSrc);
+          }
+        } // end of events
+        ));
+    });// end of forEach
+  } // endof success()
+}); //end of ajax call
+var popups = PopupManager(popupArray);
 
 var sectionManager = SectionManager([
   new Section("section#un-home", { isShowing: true,
@@ -245,6 +335,7 @@ var sectionManager = SectionManager([
       if (!mainChart) {
         mainChart = GHOObjects.initializeChart();
         mainChart.data.colors({"Funding Requirement": "rgb(240, 83, 86)"});
+        mainChart.data.colors({"People Targeted": "#0092c0"});
       }
       $("#home-video")[0].play();
     },
@@ -268,35 +359,9 @@ var sectionManager = SectionManager([
       duration: 1000,
       onShow: function() {
         if (!mainMap) {
-          mainMap = GHOObjects.initializeMap({
+          mainMap = GHOObjects.initializeMap(window.geoJsonData, {
             oninit: function(data) {
-              console.log("INIT DATA", data);
-
-              data.result.forEach(function(item) {
-                  item.header = item.country;
-                  popups.add(new Popup(item.iso, item,
-                    // {onClose: NavControl.clearPopup}
-                    ));
-
-                  //For flipbook
-                  popups.add(new Popup("flipbook-" + item.iso,
-                    {
-                      image: "",
-                      downloadLink: item.downloadLink,
-                      fbLink: item.fbLink,
-                      twLink: item.twLink,
-                      className: 'flipbook-item',
-                      content: "<iframe frameborder='0' data-iframe-src='" + item.flipbookLink + "'></iframe>",
-                      closeText: "X"
-                    },
-                    // {onClose: NavControl.clearPopup,
-                    //   onOpen: function(target, event) {
-                    //     var $iframe = $(target).find("iframe[data-iframe-src]");
-                    //     $iframe.attr("src", $iframe.data().iframeSrc);
-                    //   }
-                    //}
-                    ));
-                });// end of forEach
+              // console.log("INIT DATA", data);
             },
             onclick: function(feature) {
               console.log(feature);
@@ -332,11 +397,11 @@ var sectionManager = SectionManager([
     return false;
   });
 
-  // $(".pop-change").on("click", function() {
-  //   var target = $(this).data().target;
-  //   $("#un-gha-form input[name=t]").val(target);
-  //   $("#un-gha-form").submit();
-  // });
+  $(".pop-change").on("click", function() {
+    var target = $(this).data().target;
+    $("#un-gha-form input[name=t]").val(target);
+    $("#un-gha-form").submit();
+  });
 
   $(".facebook-share-button").on("click", function() {
     var data = $(this).data();
@@ -384,15 +449,18 @@ var windowFeatures = "status=no,height=" + height + ",width=" + width + ",resiza
   //       window.open('http://www.facebook.com/sharer.php?s=100&p[title]=' + title + '&p[summary]=' + descr + '&p[url]=' + url + '&p[images][0]=' + image, 'sharer', 'top=' + winTop + ',left=' + winLeft + ',toolbar=0,status=0,width=' + winWidth + ',height=' + winHeight);
   //   }
 
-
+  var currentPage = "";
   $(window).on("hashchange", function() {
     var _hash = window.location.hash.substr(1);
 
     var target = $.deparam(_hash);
 
     if (target.p) {
-      var page = "section#" + target.p;
-      sectionManager.show(page);
+      if (currentPage != ("section#" + target.p)) {
+        var page = "section#" + target.p;
+        currentPage = page;
+        sectionManager.show(page);
+      }
     } else {
       var page = "section#un-home";
       sectionManager.show(page);

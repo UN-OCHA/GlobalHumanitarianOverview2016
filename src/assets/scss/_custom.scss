@@ -2,36 +2,74 @@
   color: #333333 !important;
 }
 
-nav {
-  ul {
-    li {
-      margin-bottom: 10px;
-      a.red-link {
-        text-decoration: none;
-        background-color: $red;
-        color: white;
-        font-weight: 300;
-        padding: 2px 7px 2px;
-        text-transform: uppercase;
-        display: inline-block;
-        @include compat(transition, "background-color .2s, color .2s");
-        letter-spacing: 1px;
-        font-size: 20px;
 
-        &:hover {
-          color: $darkblue;
-          background-color: white;
-        }
+nav ul, ul.nav {
+  li {
+    margin-bottom: 10px;
+    a.red-link {
+      text-decoration: none;
+      background-color: $red;
+      color: white;
+      font-weight: 300;
+      padding: 2px 7px 2px;
+      text-transform: uppercase;
+      display: inline-block;
+      @include compat(transition, "background-color .2s, color .2s");
+      letter-spacing: 1px;
+      font-size: 20px;
+
+      &:hover {
+        color: $darkblue;
+        background-color: white;
       }
     }
   }
 }
+ul.nav li { text-align: left; }
 /* universal classes */
 body {
   & > div.popup {
+    // Start flipbook-item
+    &.flipbook-item {
+      .popup-content {
+        .text-area {
+          padding: 0;
+          margin: 20px;
+          p.social-area {
+            z-index: 5000;
+            position: absolute;
+            bottom: 40px;
+            ul.nav {
+              li {
+                text-align: left;
+                margin-bottom: 5px;
+                a { font-size: 12px; margin-left: 1px;
+                  &.more-link { display: none; }
+                }
+              }
+            }
+          }
+          p.close-area {
+            top: 9px; right: 5px;
+          }
+          div.popup-text-content {
+            width: calc(100% + 20px);
+            height: calc(100% + 43px);
+            margin-top: -65px;
+            margin-left: -20px;
+
+            iframe { width: inherit; height: inherit; }
+          }
+
+        }
+      }
+    } // End flipbook-item
+
     & > .popup-content  {
       border-radius: 4px;
       @include heightCalc("100% - 40px");
+
+      max-width: $desktopWidth;
       margin-top: 20px;
       & > .text-area {
         // width: 100%;
@@ -40,11 +78,42 @@ body {
         padding: 20px;
         background: none;
         background: transparent;
+
+        & > .close-area {
+          position: absolute;
+          top: -5px;
+          right: -10px;
+          a {
+            font-weight: 800 !important;
+            padding: 2px 7px;
+            background-color: $lightblue;
+            border-radius: 50%;
+            border: solid 4px white;
+            font-size: 15px;
+            font-weight: 800;
+            text-align: center;
+            color: white;
+            @include compat(box-shadow,"0px 1px 3px rgba(0,0,0,0.3)");
+          }
+        }
       }
     }
 
     &.map-country {
       & > .popup-content > .text-area {
+        p.social-area {
+          position: absolute;
+          bottom: 10px;
+          ul.nav {
+
+            li {
+              text-align: left;
+              margin-bottom: 5px;
+              a { font-size: 12px; margin-left: 1px; }
+
+            }
+          }
+        }
         h1 {
           font-weight: 600;
           font-size: 32px;
@@ -52,13 +121,84 @@ body {
           display: inline-block;
           padding: 5px 7px;
         }
+
+        .popup-text-content {
+          .country-text {
+            position: absolute;
+            width: 33%;
+            text-align: left;
+            top: 250px;
+            padding: 5px;
+            background-color: rgba(0,146,192,0.7);
+            p { text-align: left; font-size: 12px; }
+          }
+          .country-info-area {
+            width: 33%;
+            float: left;
+            margin-top: 10px;
+            padding: 10px;
+            background-color: rgba(240, 246, 251, 0.8);
+
+            table {
+              width: 100%;
+              tr  {
+                td {
+                  width: 49%;
+                  &:first-child {
+                    margin-right: 0.5%;
+                  }
+                  h3 {
+                    text-transform: uppercase;
+                    color: #333333;
+                    padding: 4px 2px;
+                    width: 96%;
+                    border: 1px solid #333333;
+                    border-width: 1px 0;
+                    margin-bottom: 5px;
+                    margin-right: 5px;
+                    display: inline-block;
+                  }
+                  i.i-stats {
+                    vertical-align: middle;
+                  }
+                  span.ctr-amt {
+                    color: $lightblue;
+                    font-size: 30px;
+                    vertical-align: middle;
+                    margin-left: 5px;
+                  }
+                }
+              }
+            }
+          }
+        } // end of popup-text-content
+
       }
+
+      &.push-right > .popup-content > .text-area {
+        text-align: right;
+       & > .popup-text-content {
+
+
+          .country-info-area {
+            float: right;
+            text-align: left;
+          }
+          .country-text {
+            right: 20px;
+          }
+        } //.popup-text-content
+        .social-area {
+          right: 20px;
+          & > ul.nav li { text-align: right; }
+        }
+      }//end of push-right .. .popup-text-content
     }
   }
 
   & > section.subpage {
     & > div.viewport {
-      width: 1100px;
+      width: $desktopWidth;
       margin-left: 50%;
       @include translateAll(-50%, 0);
 
@@ -158,7 +298,7 @@ section#un-home {
       @include translateAll(-50%, -50%);
 
       video {
-        width: inherit;
+        width: 100vmax;
         height: inherit;
       }
     }
@@ -166,7 +306,7 @@ section#un-home {
       text-align: left;
       right: 0;
       width: 50%;
-      top: 90px;
+      top: 140px;
 
       & > h3, & > p { opacity: 0; }
       h3 {
@@ -175,16 +315,28 @@ section#un-home {
         padding: 3px;
         text-transform: uppercase;
         letter-spacing: 2px;
-        font-size: 21px;
+        font-size: 19px;
         font-weight: 600;
-        position: absolute;
-        top: 70px;
+        line-height: 1.3;
+        padding-left: 12px;
 
+        strong {
+          font-size: 26px;
+          font-weight: 800;
+        }
       }
 
       #bar-chart {
         width: 100%;
         height: 40%;
+
+        .c3-line {
+          stroke-width: 4px !important;
+        }
+        .c3-circle {
+          r: 5px;
+          stroke: white;
+        }
       }
 
       p {
@@ -193,6 +345,7 @@ section#un-home {
           color: white;
           margin-top: 20px;
           line-height: 1.3;
+          font-size: 12px;
       }
 
     }

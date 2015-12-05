@@ -57,16 +57,16 @@ var Popup =(function($) {
                                   .append(
                                           $("<ul class='nav' />")
                                           .append($("<li class='flipbook-popup-link'/>").append(
-                                        $("<a href='javascript: void(null);' class='pop-change link-icon'/>")
+                                        $("<a href='javascript: void(null);' class='pop-change more-link link-icon red-link'/>")
                                         .attr("data-target", "flipbook-" + that.id)
-                                        .html("<i class='spr spr-social-more icon'></i>")
+                                        .html("READ MORE<i style='display: none' class='spr spr-social-more icon'></i>")
                                       ))
                                     .append($("<li />").append(
-                                        $("<a href='" + that.content.downloadLink + "' target='_blank' class='link-icon'/>").html("<i class='spr spr-social-dl icon'></i>")
+                                        $("<a href='" + that.content.downloadLink + "' target='_blank' class='red-link link-icon'/>").html("DOWNLOAD<i class='spr spr-social-dl icon' style='display: none;'></i>")
                                       ))
                                       .append(
                                           $("<li />").append(
-                                            $("<a href='javascript: void(null);' class='facebook-share-button'/>").html("<i class='spr spr-social-fb'></i>")
+                                            $("<a href='javascript: void(null);' class='facebook-share-button red-link'/>").html("SHARE<i class='spr spr-social-fb' style='display: none'></i>")
                                               .attr("data-fb",that.content.fbLink)
                                               .attr("data-title", that.content.subheader)
                                               .attr("data-desc", that.content.tagline)
@@ -74,10 +74,10 @@ var Popup =(function($) {
                                           )
                                       )
                                       .append($("<li/>").append(
-                                        $("<a href='javascript: void(null);' class='twitter-share-button'/>")
+                                        $("<a href='javascript: void(null);' class='twitter-share-button red-link'/>")
                                           .attr("data-tweet", that.content.tweet)
                                           .attr("data-twLink", that.content.twLink)
-                                          .html("<i class='spr spr-social-tw'></i>"))
+                                          .html("TWEET<i class='spr spr-social-tw'></i>"))
                                       )
                                     )
                                 )
@@ -128,14 +128,18 @@ var Section = (function($) {
 
     this.show = function() {
       var that = this;
-      that.container.css(that.const.show);
-      that.container.css(that.options.hide);
-      that.container.animate(that.options.show, that.options.duration);
-      that.container.trigger("section-mod-show");
+      if ( !that.isShowing ) {
+        that.container.css(that.const.show);
+        that.container.css(that.options.hide);
+        that.container.animate(that.options.show, that.options.duration);
+        that.container.trigger("section-mod-show");
+        that.isShowing = true;
+      }
     };
 
     this.hide = function() {
       var that = this;
+      that.isShowing = false;
       that.container.animate(that.options.hide, that.options.duration,
         function() { that.container.css(that.const.hide); });
 
@@ -146,7 +150,7 @@ var Section = (function($) {
     this.initialize = function() {
       var that = this;
       if (that.options.isShowing) {
-        this.isShowing = true;
+        // this.isShowing = true;
         that.container.css(that.const.show);
         that.container.css(that.options.show);
       } else {
