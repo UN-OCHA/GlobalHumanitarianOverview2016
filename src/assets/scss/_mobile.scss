@@ -1,0 +1,160 @@
+@media screen and (max-width: 700px) {
+  body > section.subpage {
+    &, & > div.viewport {
+      width: 100%;
+
+      & > article.home-brand {
+        top: 0;
+        // zoom: 70%;
+      }
+
+      & > article.home-menu {
+        top: auto;
+        bottom: 0;
+        left: 0;
+        height: auto;
+        overflow: hidden;
+      }
+    } // end of div.viewport
+
+    &#un-gha-video {
+      div.viewport {
+        & > article#main-video {  display: none !important; }
+        & > article#mobile-video {
+          display: block !important ;
+          top: 120px;
+
+          video { width: 100vw; }
+        }
+      }
+    }
+
+
+    &#un-home {
+      div.viewport {
+        article#home-quote,
+        article#home-chart { display: none; }
+        div.video-bg-area { display: none; }
+
+        article#home-title {
+          padding: 0;
+          width: 100%;
+          left: 0;
+          right: auto;
+          opacity: 1 !important;
+          top: 102px;
+          text-align: center;
+
+          h3 {
+            background-color: transparent !important;
+            opacity: 1 !important;
+            margin-top: 20px;
+            span { letter-spacing: 0 !important; font-size: 26px !important;
+              &#in-2016 {
+                position: relative;
+                top: auto;
+                left: auto;
+                margin-left: 5px;
+              }
+
+              text-shadow: 0 2px 1px rgba(0, 0, 0, 0.5);
+            }
+            br { display: none; }
+
+
+          }
+        }
+      }
+    }
+  }
+  //Start of flipbook for mobile
+  body > div.popup.flipbook-item {
+    & > div.popup-content {
+      @include widthCalc("100% - 10px");
+      @include heightCalc("100% - 10px");
+      margin-top: 5px;
+
+      .text-area p.social-area {
+        bottom: 10px;
+        left: 0;
+
+        ul.nav li {
+          display: inline-block;
+          margin: 0;
+          margin-right: 5px;
+        }
+      }
+
+    }
+  } // End of Flipbook for mobile
+  body > div.popup.map-country {
+    & > div.popup-content {
+      @include widthCalc("100% - 10px");
+      @include heightCalc("100% - 10px");
+      margin-top: 5px;
+
+      & > div.text-area {
+        @include widthCalc("100% - 10px");
+        height: auto;
+        padding: 5px;
+        // padding-top: 100vh;
+        @include calcAll(padding-top, "100vh - 185px");
+        text-align: left !important;
+        h1 { font-size: 22px; position: absolute; bottom: 175px; }
+        p.social-area { right: auto !important; }
+        & > div.popup-text-content {
+          & > div.country-info-area,
+          & > div.country-text {
+            // width: 100%;
+
+            @include widthCalc("100% - 20px");
+            max-width: 420px;
+
+            i.icon.i-stats {
+              width: 30px;
+              height: 30px;
+            }
+          }
+
+          & > div.country-info-area {
+            float: none;
+            margin-top: 5px;
+            h3 { font-size: 13px; }
+            table tr td span.ctr-amt {
+              font-size: 22px;
+            }
+          }
+          & > div.country-text {
+            position: relative;
+            top: auto;
+            margin-top: 5px;
+          }
+        }
+      }
+    }
+  }
+
+  section#un-gha-map div.viewport article.home-menu, section#un-gha-map div.viewport article.home-brand {
+    margin-left: 0;
+  }
+  .popup {
+    &.map-country {
+      div.text-area{
+
+        div.country-text { display: none; }
+      }
+    }
+  }
+
+  body > div.popup.map-country > .popup-content > .text-area p.social-area {
+    position: relative;
+    bottom: auto;
+    top: auto;
+    margin-top: 3px;
+    text-align: right;
+    max-width: 445px;
+
+    ul.nav { li { display: inline-block;     margin-left: 5px;
+    margin-right: 0; } }
+  }
+}

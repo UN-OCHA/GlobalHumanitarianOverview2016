@@ -14,7 +14,13 @@ fi
 if [ "$SERVER_TYPE" = "staging" ];
 then
   echo "Importing Humanity 360 on Staging"
-  sshpass -e scp -rv src/* ${UN_STAGING}:${UN_STAGING_DIR}/gho2015
+  sshpass -e ssh ${UN_STAGING} "mkdir ${UN_STAGING_DIR}/stateofaid"
+  sshpass -e ssh ${UN_STAGING} "mkdir ${UN_STAGING_DIR}/2016appeal"
+
+  sshpass -e scp -rv src/* ${UN_STAGING}:${UN_STAGING_DIR}/stateofaid
+  sshpass -e scp -rv gho2016/* ${UN_STAGING}:${UN_STAGING_DIR}/2016appeal
+
+  sshpass -e ssh ${UN_STAGING} "touch ${UN_STAGING_DIR}/stateofaid/index.php"
 
   # echo "Importing HE Study Flipbook on Staging"
   # sshpass -e scp -rv he-flipbook/* ${UN_STAGING}/he-study-2015

@@ -61,9 +61,6 @@ var Popup =(function($) {
                                         .attr("data-target", "flipbook-" + that.id)
                                         .html("READ MORE<i style='display: none' class='spr spr-social-more icon'></i>")
                                       ))
-                                    .append($("<li />").append(
-                                        $("<a href='" + that.content.downloadLink + "' target='_blank' class='red-link link-icon'/>").html("DOWNLOAD<i class='spr spr-social-dl icon' style='display: none;'></i>")
-                                      ))
                                       .append(
                                           $("<li />").append(
                                             $("<a href='javascript: void(null);' class='facebook-share-button red-link'/>").html("SHARE<i class='spr spr-social-fb' style='display: none'></i>")
@@ -112,8 +109,8 @@ var Section = (function($) {
   return function(target, options) {
     this.id = target;
     this.const = {
-      hide: { left: "100%" },
-      show: { left: "0" }
+      hide: { display: "none" },
+      show: { display: "block" }
     };
     this.isShowing = false;
     this.container = $(target);

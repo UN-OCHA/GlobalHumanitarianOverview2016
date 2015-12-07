@@ -74,8 +74,8 @@ var GHOObjects = function() {
             show: false
           },
           oninit: function() {
-            $("#home-chart > h3").delay(3000).animate({opacity: 1}, 1000);
-            $("#home-chart > p").delay(4000).animate({opacity: 1}, 1000);
+            $("#home-title > h3").delay(3000).animate({opacity: 1}, 1000);
+            // $("#home-chart > p").delay(4000).animate({opacity: 1}, 1000);
           }
       });
     }, // end of initializeChart.
