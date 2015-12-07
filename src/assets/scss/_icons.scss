@@ -10,4 +10,19 @@ i.icon {
   &.i-in-need { background-image: url(../img/in-need.png); }
   &.i-targeted { background-image: url(../img/targeted.png); }
   &.i-fund { background-image: url(../img/fund.png);  }
+
+  &.i-logo {
+    width: 36px;
+    height: 44px;
+    background-size: 100% 100%;
+    background-image: url(../img/logo.png);  }
+
+  &.i-social  {
+    width: 24px; height: 24px;
+    background-size: 100% 100%;
+    &.i-tw-on { background-image: url(../img/i-tw-on.png); }
+    &.i-tw-off { background-image: url(../img/i-tw-off.png); }
+    &.i-fb-on { background-image: url(../img/i-fb-on.png); }
+    &.i-fb-off { background-image: url(../img/i-fb-off.png); }
+  }
 }

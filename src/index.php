@@ -1,14 +1,14 @@
 <?php $json = file_get_contents("https://sheetsu.com/apis/ac727b26"); ?>
 <!DOCTYPE html>
-<meta property="og:url" content="http://www.unocha.org/humanity360/index.php" />
+<meta property="og:url" content="http://www.unocha.org/stateofaid" />
 <meta property="og:type" content="article" />
 <meta property="og:title" content="The Challenges We Face Today, and Building a Better Tomorrow" />
 <meta property="og:description" content="Highlights major trends challenges and opportunities in the nature of humanitarian crises, showing how the humanitarian landscape is evolving in a rapidly changing world. And exploring what humanitarian effectiveness means in today's world ‐ better meeting the needs of people in crisis, better moving people out of crisis." />
-<meta property="og:image" content="https://ocha.smugmug.com/Countries/IRQ/May-2015-CSB-mission/i-vhzsxjj/0/XL/605A3700-XL.jpg" />
-<meta property="og:image:url" content="https://ocha.smugmug.com/Countries/IRQ/May-2015-CSB-mission/i-vhzsxjj/0/XL/605A3700-XL.jpg" />
+<meta property="og:image" content="http://www.unocha.org/stateofaid/assets/img/fb.png" />
+<meta property="og:image:url" content="http://www.unocha.org/stateofaid/assets/img/fb.png" />
 <title>Global Humanitarian Overview</title>
 
-<meta property="description" content="Highlights major trends challenges and opportunities in the nature of humanitarian crises, showing how the humanitarian landscape is evolving in a rapidly changing world. And exploring what humanitarian effectiveness means in today's world ‐ better meeting the needs of people in crisis, better moving people out of crisis." />
+<meta property="description" content="A consolidated appeal to support people affected by disaster and conflict." />
 
 
 <meta charset="utf-8">
@@ -31,32 +31,10 @@
         <source src="./assets/mov/faces.webm" type='video/webm'/>
       </video>
     </div>
-    <article class='home-menu'>
-      <nav>
-        <ul>
-          <li>
-            <a href='http://online.fliphtml5.com/xdoz/ucwq' class='red-link' target='_blank'>
-              <span>Online Version</span>
-            </a>
-          </li>
-          <li>
-            <a href='https://docs.unocha.org/sites/dms/Documents/GHO-2016.pdf' class='red-link' target='_blank'>
-              <span>Download PDF</span>
-            </a>
-          </li>
-          <li>
-            <a href='javascript: void(null);' class='red-link' onclick='NavControl.toMap()'>
-              <span>View Funding Map</span>
-            </a>
-          </li>
-          <li>
-            <a href='javascript: void(null);' class='red-link' onclick='NavControl.toVideo()'>
-              <span>Video: Hopes and Needs</span>
-            </a>
-          </li>
-        </ul>
-      </nav>
+    <article class='footer'>
+      <a href='http://www.unocha.org' target='_blank'><i class='icon i-logo'></i></a>
     </article>
+    <?php include('_menu.php'); ?>
     <article id='home-quote' class='zoomable'>
       <div class='about-text-area'>
         <p>
@@ -99,33 +77,7 @@
       </div>
     </article>
 
-    <article class='home-menu'>
-      <nav>
-        <ul>
-          <li>
-            <a href='http://online.fliphtml5.com/xdoz/ucwq' class='red-link' target='_blank'>
-              <span>Online Version</span>
-            </a>
-          </li>
-          <li>
-            <a href='https://docs.unocha.org/sites/dms/Documents/GHO-2016.pdf' class='red-link' target='_blank'>
-              <span>Download PDF</span>
-            </a>
-          </li>
-          <li>
-            <a href='javascript: void(null);' class='red-link' onclick='NavControl.toMap()'>
-              <span>View Funding Map</span>
-            </a>
-          </li>
-          <li>
-            <a href='javascript: void(null);' class='red-link' onclick='NavControl.toVideo()'>
-              <span>Video: Hopes and Needs</span>
-            </a>
-          </li>
-        </ul>
-      </nav>
-    </article>
-
+    <?php include('_menu.php'); ?>
     <article id='main-video' class='subsubpage content zoomable'>
         <iframe id='gha-video'></iframe>
     </article>
@@ -144,33 +96,10 @@
         <h2>20<br/>16</h2>
       </div>
     </article>
-
-    <article class='home-menu'>
-      <nav>
-        <ul>
-          <li>
-            <a href='http://online.fliphtml5.com/xdoz/ucwq' class='red-link' target='_blank'>
-              <span>Online Version</span>
-            </a>
-          </li>
-          <li>
-            <a href='https://docs.unocha.org/sites/dms/Documents/GHO-2016.pdf' class='red-link' target='_blank'>
-              <span>Download PDF</span>
-            </a>
-          </li>
-          <li>
-            <a href='javascript: void(null);' class='red-link' onclick='NavControl.toMap()'>
-              <span>View Funding Map</span>
-            </a>
-          </li>
-          <li>
-            <a href='javascript: void(null);' class='red-link' onclick='NavControl.toVideo()'>
-              <span>Video: Hopes and Needs</span>
-            </a>
-          </li>
-        </ul>
-      </nav>
+    <article id='disclaimer'>
+      <p><strong>DISCLAIMER:</strong> The boundaries and names shown and the designations used on this product do not imply official endorsement or acceptance by the United Nations.</p>
     </article>
+    <?php include('_menu.php'); ?>
 
     <article id='map-container' class='subsubpage content'>
       <div id='map'></div>
@@ -257,7 +186,8 @@ var CURRENTDATA = [
   { label: "2012",  requirement: 8800000000, targeted: 62000000},
   { label: "2013",  requirement: 12900000000, targeted: 73000000},
   { label: "2014",  requirement: 16800000000, targeted: 76000000},
-  { label: "2015", requirement: 20100000000, targeted: 87600000}];
+  { label: "2015", requirement: 19900000000, targeted: 82500000},
+  { label: "2016", requirement: 20100000000, targeted: 87600000}];
 
 var oldDateFormat = d3.time.format("%m-%Y");
 
@@ -395,7 +325,6 @@ var sectionManager = SectionManager([
       onShow: function() {
         if (!mainMap) {
             try {
-
               mainMap = GHOObjects.initializeMap(window.geoJsonData, {
                 oninit: function(data) {
                   // console.log("INIT DATA", data);
