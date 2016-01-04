@@ -12,6 +12,11 @@
             </a>
           </li>
           <li>
+            <a href='https://docs.unocha.org/sites/dms/Documents/Humanitarian%20Funding%20Update_(GHO)_30Dec2015.pdf' class='red-link' target='_blank' style='font-size: 12px; margin-left: 20px;'>
+              <span>Funding Update - Dec 2015</span>
+            </a>
+          </li>
+          <li>
             <a href='javascript: void(null);' class='red-link' onclick='NavControl.toMap()'>
               <span>View Funding Map</span>
             </a>

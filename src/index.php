@@ -57,7 +57,7 @@
     </article>
     <article id='home-title' class='zoomable'>
       <h3 style='position: relative; background-color: rgba(240, 246, 251, 0.8);'><span style='letter-spacing: 1.2px;'>$20.1 billion to provide aid</span><br/>
-          <span style='color: #0092c0;letter-spacing: -0.05px;'>to 87.6 million people in need</span>
+          <span style='color: #0092c0;letter-spacing: 4.7px;'>to 87.6 million people</span>
           <span id='in-2016'>in 2016</span></h3>
     </article>
     <article id="home-chart" class='zoomable'>
@@ -95,6 +95,11 @@
         <h3>Overview</h3>
         <h2>20<br/>16</h2>
       </div>
+    </article>
+    <article id='regional-area'>
+      <h5>Regional Appeal</h5>
+      <ul id='regional-area-list'>
+      </ul>
     </article>
     <article id='disclaimer'>
       <p><strong>DISCLAIMER:</strong> The boundaries and names shown and the designations used on this product do not imply official endorsement or acceptance by the United Nations.</p>
@@ -200,7 +205,7 @@ var popupArray = [];
         "type": "FeatureCollection",
 
         //Start rendering datapoints
-        "features": data.result.map(function(d) {
+        "features": data.result.filter(function(d) { return d.is_regional.toLowerCase() === "false" }).map(function(d) {
             return {
               "type": "Feature",
               "geometry": {
@@ -227,6 +232,7 @@ var popupArray = [];
         return fmt(num);
       }
     };
+
     //Create backup map
     data.result.forEach(function(item) {
       var bleep = $("<area />")
@@ -287,6 +293,19 @@ var popupArray = [];
         } // end of events
         ));
     });// end of forEach
+
+    // get all regional area and plot it
+    data.result.filter(function(d) { return d.is_regional.toLowerCase() === 'true'; }).forEach(function(d) {
+        $("ul#regional-area-list")
+          .append(
+              $("<li/>")
+                .append(
+                  $("<a href='javascript: void(null)'/>").text(d.country).on('click',
+                        function() { NavControl.toPopup(d.iso); }
+                    )
+                )
+              );
+    });
   }(window.ALLDATA));
 var popups = PopupManager(popupArray);
 
