@@ -33,8 +33,11 @@ fi
 if [ "$SERVER_TYPE" = "prod" ];
 then
   echo "Importing Humanity 360 on PROD"
-  sshpass -e scp -rv src/* ${UN_PROD1}:${UN_PROD_DIR}/gho2015
-  sshpass -e scp -rv src/* ${UN_PROD2}:${UN_PROD_DIR}/gho2015
+  sshpass -e scp -rv src/* ${UN_PROD1}:${UN_PROD_DIR}/stateofaid
+  sshpass -e scp -rv src/* ${UN_PROD2}:${UN_PROD_DIR}/stateofaid
+
+  sshpass -e scp -rv gho2016/* ${UN_PROD1}:${UN_PROD_DIR}/2016appeal
+  sshpass -e scp -rv gho2016/* ${UN_PROD2}:${UN_PROD_DIR}/2016appeal
 
   # echo "Importing HE Study Flipbook on PROD"
   # sshpass -e scp -rv he-flipbook/* ${UN_PROD1}:${UN_PROD_DIR}/gho2015
@@ -44,4 +47,3 @@ then
   # sshpass -e scp -rv whdt-flipbook/* ${UN_PROD1}/data-and-trends-2015
   # sshpass -e scp -rv whdt-flipbook/* ${UN_PROD2}/data-and-trends-2015
 fi
-
