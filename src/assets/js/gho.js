@@ -81,7 +81,7 @@ var GHOObjects = function() {
     }, // end of initializeChart.
     //has onClickEvent(feature) event
     initializeMap : function (geojsonData, events) {
-      console.log("initializing GHO Map");
+      // console.log("initializing GHO Map");
 
       L.mapbox.accessToken = "pk.eyJ1IjoicmVsaWVmd2ViIiwiYSI6IldYR2ZuV3cifQ.eSPZMZWE6UyLtO0OH_-qrw";
       var mapboxTiles = L.tileLayer('http://{s}.tiles.mapbox.com/v4/reliefweb.c0787f42/{z}/{x}/{y}.png?access_token=' + L.mapbox.accessToken, {
@@ -93,7 +93,7 @@ var GHOObjects = function() {
         zoom: 3,
         zoomControl: false, scrollWheelZoom: true}).addLayer(mapboxTiles);
 
-      console.log(geojsonData);
+      // console.log(geojsonData);
       geojsonData.forEach(function(d) {
         var dot = L.circleMarker([parseFloat(d.lon), parseFloat(d.lat)], { color: 'red', stroke: '#33495A', strokeWidth: 4, data: d });
 
