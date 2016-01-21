@@ -61,6 +61,12 @@ var Popup =(function($) {
                                         .attr("data-target", "flipbook-" + that.id)
                                         .html("READ MORE<i style='display: none' class='spr spr-social-more icon'></i>")
                                       ))
+                                      .append(that.content.downloadLink != "" ? $("<li />").append(
+                                        $("<a href='" + that.content.downloadLink + "' target='_blank' class='pop-change more-link link-icon red-link'/>")
+                                        .attr("data-target", "download-" + that.id)
+                                        .html("Download HRP<i style='display: none' class='spr spr-social-more icon'></i>")
+                                      ) : "")
+
                                       .append(
                                           $("<li />").append(
                                             $("<a href='javascript: void(null);' class='facebook-share-button red-link'/>").html("SHARE<i class='spr spr-social-fb' style='display: none'></i>")

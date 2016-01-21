@@ -14,10 +14,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 
+<link href='//api.tiles.mapbox.com/mapbox.js/v2.1.9/mapbox.css' rel='stylesheet' />
 <link href='./assets/css/c3.min.css' rel="stylesheet" type="text/css" />
 <link href='./assets/css/base.css' rel="stylesheet" type="text/css" />
 <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,100,600,800' rel='stylesheet' type='text/css'>
 <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.12.0/mapbox-gl.css' rel='stylesheet' />
+<link href='./assets/css/leaflet-label.css' rel='stylesheet' />
 
 <form id='un-gha-form'>
   <input type='hidden' name='p' name='page'/>
@@ -128,7 +130,8 @@
 <script src='./assets/js/d3.js'></script>
 
 <!-- For Mapbox -->
-<script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.12.0/mapbox-gl.js'></script>
+<script src='./assets/js/mapbox.js'></script>
+<script src='./assets/js/leaflet-label.js'></script>
 
 <script src='./assets/js/models.js'></script>
 <script src='./assets/js/gho.js'></script>
@@ -199,25 +202,26 @@ var oldDateFormat = d3.time.format("%m-%Y");
 var popupArray = [];
 //pseudo ajax call
 (function(data) {
-    window.geoJsonData = {
-      "type": "geojson",
-      "data": {
-        "type": "FeatureCollection",
+  window.geoJsonData = data.result.filter(function(d) { return d.is_regional.toLowerCase() === "false" });
+    // window.geoJsonData = {
+    //   "type": "geojson",
+    //   "data": {
+    //     "type": "FeatureCollection",
 
-        //Start rendering datapoints
-        "features": data.result.filter(function(d) { return d.is_regional.toLowerCase() === "false" }).map(function(d) {
-            return {
-              "type": "Feature",
-              "geometry": {
-                "type": "Point",
-                "coordinates": [parseFloat(d.lat), parseFloat(d.lon)]
-              },
-              "properties": d
-            }
-        })
-        //end of feature rendering
-      }
-    }; //end of creating geoJson data
+    //     //Start rendering datapoints
+    //     "features": data.result.filter(function(d) { return d.is_regional.toLowerCase() === "false" }).map(function(d) {
+    //         return {
+    //           "type": "Feature",
+    //           "geometry": {
+    //             "type": "Point",
+    //             "coordinates": [parseFloat(d.lat), parseFloat(d.lon)]
+    //           },
+    //           "properties": d
+    //         }
+    //     })
+    //     //end of feature rendering
+    //   }
+    // }; //end of creating geoJson data
 
     var formatter = function(num) {
       if (num == "-") {
@@ -348,13 +352,14 @@ var sectionManager = SectionManager([
                 oninit: function(data) {
                   // console.log("INIT DATA", data);
                 },
-                onclick: function(feature) {
-                  console.log(feature);
-                  NavControl.toPopup(feature.properties.iso);
-                }
+                // onclick: function(feature) {
+                //   console.log(feature);
+                //   // NavControl.toPopup(feature.iso);
+                // }
               });
             }  // end of try
             catch (e) {
+              console.error(e);
               $("#backup-map").css("opacity", 1);
               $("#map-container").hide();
             } // end of catch
