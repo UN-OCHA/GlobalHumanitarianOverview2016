@@ -101,7 +101,7 @@ var GHOObjects = function() {
               NavControl.toPopup(e.target.options.data.iso);
             });
 
-          dot.bindLabel(d.country, {className: "my-label", offset: [5, -10] });
+          dot.bindLabel(d.country, {className: "my-label", offset: [7, -10] });
 
           dot.addTo(mapObject);
       });
